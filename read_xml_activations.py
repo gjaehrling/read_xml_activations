@@ -25,9 +25,11 @@ except ImportError as e:
 
 
 def main():
+    conf = SparkConf().setAppName("Read XML").setMaster("local")
+    sc = SparkContext(conf=conf)
     filename = "hdfs:/user/hadoop/data/*.xml"
     activations = sc.textFile(filename)
-    activationTrees = activations.mapPartitions(lambda xml: parseXML(s))
+    activationTrees = activations.mapPartitions(lambda xml: parseXML(xml))
 
 
 # example for a user defined function:
@@ -37,7 +39,7 @@ def parseXML(s):
     tree = ET.parse(s)
     root = tree.getroot()
     for element in root.iter('model'):
-        print element.text
+        print str(element.text)
 
 
 if __name__ == '__main__':
