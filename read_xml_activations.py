@@ -25,9 +25,9 @@ except ImportError as e:
 
 
 def main():
-    print "Program name: ", sys.argv[0]
-    print "passed argument to XML parser: ", sys.argv[1]
-    parseXML(sys.argv[1])
+    filename = "hdfs:/user/hadoop/data/*.xml"
+    activations = sc.textFile(filename)
+    activationTrees = activations.mapPartitions(lambda xml: parseXML(s))
 
 
 # example for a user defined function:
@@ -36,7 +36,6 @@ def main():
 def parseXML(s):
     tree = ET.parse(s)
     root = tree.getroot()
-
     for element in root.iter('model'):
         print element.text
 
